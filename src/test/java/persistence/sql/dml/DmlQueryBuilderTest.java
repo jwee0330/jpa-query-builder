@@ -20,7 +20,7 @@ class DmlQueryBuilderTest {
         final String insertSql = new DmlQueryBuilder(Person.class)
                 .insert(jeongwon);
 
-        assertThat(insertSql).isEqualTo("insert into users (nick_name,old,email) values ('정원',15,'a@a.com')");
+        assertThat(insertSql).isEqualTo("insert into users (id,nick_name,old,email) values (null,'정원',15,'a@a.com')");
     }
 
     @Test
@@ -35,6 +35,14 @@ class DmlQueryBuilderTest {
         final String findByIdSql = new DmlQueryBuilder(Person.class).findById(1L);
 
         assertThat(findByIdSql).isEqualTo("select id,nick_name,old,email from users where id=1");
+    }
+
+    @Test
+    void deleteByIdSql() {
+        final Person jeongwon = new Person(1L, "정원", 15, "a@a.com", 1);
+        final String deleteByIdSql = new DmlQueryBuilder(Person.class).delete(jeongwon);
+
+        assertThat(deleteByIdSql).isEqualTo("delete from users where id=1");
     }
 
 }

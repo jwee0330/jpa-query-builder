@@ -20,27 +20,17 @@ public class DdlQueryBuilder extends QueryBuilder {
     }
 
     public String createTable() {
-        return buildSql();
-    }
-
-    private String buildSql() {
-        String content = addColumns(idColumns.get()) +
-                addColumns(columns.get()) +
-                addConstraint();
-        return String.format(CREATE_TABLE, getTableName(), content);
+        final String tableName = getTableName();
+        String allColumns = addColumns(columns.getColumns()) + addConstraint();
+        return String.format(CREATE_TABLE, tableName, allColumns);
     }
 
     private String addConstraint() {
-        StringBuilder sb = new StringBuilder();
-        if (idColumns.isNotEmpty()) {
-            sb.append(" constraint pk_")
-                    .append(entity.getSimpleName().toLowerCase())
-                    .append(" primary key (");
-            final String join = joinWithComma(idColumns.getColumnNames());
-            sb.append(join);
-            sb.append(")");
-        }
-        return sb.toString();
+        return " constraint pk_" +
+                getTableName().toLowerCase() +
+                " primary key (" +
+                id.getName() +
+                ")";
     }
 
     private String addColumns(Map<String, Field> columns) {

@@ -1,31 +1,17 @@
 package persistence.sql;
 
+import jakarta.persistence.Transient;
+
 import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
 
-public class Columns {
-    protected final Map<String, Field> columns = new LinkedHashMap<>();
+public class Columns extends AbstractColumns {
 
-    public void put(String columnName, Field field) {
-        columns.put(columnName, field);
+    public Columns(Class<?> clazz) {
+        super(clazz);
+    }
+    @Override
+    protected boolean addable(Field field) {
+        return !field.isAnnotationPresent(Transient.class);
     }
 
-    public Set<String> getColumnNames() {
-        return columns.keySet();
-    }
-
-    public Collection<Field> getColumnFields() {
-        return columns.values();
-    }
-
-    public boolean isNotEmpty() {
-        return !columns.isEmpty();
-    }
-
-    public Map<String, Field> get() {
-        return columns;
-    }
 }
